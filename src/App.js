@@ -1,10 +1,26 @@
 import React from 'react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+// Components
+import Login from './pages/Login/Login';
+import BoardList from './pages/BoardList/BoardList';
 
 const App = () => {
   return (
-    <div className="container">
-      <h1>App</h1>
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Login />
+        </Route>
+        <Route exact path="/boards">
+          <BoardList />
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 
