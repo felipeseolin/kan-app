@@ -2,12 +2,11 @@ import React from 'react'
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 // Components
-import Login from './pages/Login/Login';
-import BoardList from './pages/BoardList/BoardList';
+import Login from './pages/Login';
+import BoardList from './pages/BoardList';
 
 const App = () => {
   return (
