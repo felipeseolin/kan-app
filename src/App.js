@@ -1,26 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+// Components
+import Login from './pages/Login';
+import BoardList from './pages/BoardList';
+import BoardCreate from './pages/BoardCreate';
+import BoardEdit from './pages/BoardEdit';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Login />
+        </Route>
+        <Route exact path="/boards">
+          <BoardList />
+        </Route>
+        <Route exact path="/boards/new">
+          <BoardCreate />
+        </Route>
+        <Route exact path="/boards/:id/edit">
+          <BoardEdit />
+        </Route>
+      </Switch>
+    </Router>
   );
-}
+};
 
 export default App;
