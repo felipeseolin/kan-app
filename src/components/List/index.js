@@ -1,6 +1,6 @@
 import React from 'react';
 
-const List = ({ list, children }) => {
+const List = ({ list, idBoard, handleDelete, children }) => {
   return (
     <div className="col col-lg-3 col-md-4 col-sm-6 col-xs-12">
       <div className="card">
@@ -10,23 +10,29 @@ const List = ({ list, children }) => {
         </div>
         <div className="card-body">
           {children}
-          <a className="btn btn-success" href="/lists/{{ this.id }}/cards/new">
+          <a
+            className="btn btn-success"
+            href={`/boards/${idBoard}/lists/${list._id}/cards/new`}
+          >
             Novo cartão
           </a>
         </div>
         <div className="card-footer">
           <a
-            href="/boards/{{ ../board.id }}/lists/{{ this.id }}"
+            href={`/boards/${idBoard}/lists/${list._id}/edit`}
             className="btn btn-primary"
           >
             Editar
           </a>
-          <a
-            href="/boards/{{ ../board.id }}/lists/destroy/{{ this.id }}"
+          <button
+            type="button"
             className="btn btn-danger"
+            onClick={() => {
+              handleDelete(list._id);
+            }}
           >
             Excluir
-          </a>
+          </button>
         </div>
       </div>
     </div>

@@ -14,10 +14,18 @@ const BoardDetails = () => {
     const response = await api.get(`boards/all/${id}`);
     setBoard(response.data);
   };
-  
+
   useEffect(() => {
     fetchBoard();
   }, []);
+
+  const handleDelete = id => {
+    api
+      .delete(`/lists/${id}`)
+      .then(() => alert('Lista excluida'))
+      .catch(() => alert('Erro ao excluir'))
+      .finally(() => window.location.reload());
+  };
 
   return (
     <div className="container-fluid">
@@ -37,7 +45,12 @@ const BoardDetails = () => {
 
           <div className="row">
             {board.lists.map(list => (
-              <List key={list._id} list={list}>
+              <List
+                key={list._id}
+                list={list}
+                idBoard={board._id}
+                handleDelete={handleDelete}
+              >
                 {list.cards.map(card => (
                   <Card key={card._id} card={card} idList={list._id} />
                 ))}
