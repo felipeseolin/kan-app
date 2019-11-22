@@ -21,7 +21,7 @@ const ListCreate = () => {
         _board: idBoard,
       })
       .then(() => {
-        alert('Nova Lista salvo com sucesso');
+        alert('Nova Lista salva com sucesso');
         window.location.href = `/boards/${idBoard}`;
       })
       .catch(err => {
