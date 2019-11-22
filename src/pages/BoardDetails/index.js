@@ -19,10 +19,18 @@ const BoardDetails = () => {
     fetchBoard();
   }, []);
 
-  const handleDelete = id => {
+  const handleListDelete = id => {
     api
       .delete(`/lists/${id}`)
       .then(() => alert('Lista excluida'))
+      .catch(() => alert('Erro ao excluir'))
+      .finally(() => window.location.reload());
+  };
+
+  const handleCardDelete = id => {
+    api
+      .delete(`/cards/${id}`)
+      .then(() => alert('Cartão excluido'))
       .catch(() => alert('Erro ao excluir'))
       .finally(() => window.location.reload());
   };
@@ -49,10 +57,16 @@ const BoardDetails = () => {
                 key={list._id}
                 list={list}
                 idBoard={board._id}
-                handleDelete={handleDelete}
+                handleDelete={handleListDelete}
               >
                 {list.cards.map(card => (
-                  <Card key={card._id} card={card} idList={list._id} />
+                  <Card
+                    key={card._id}
+                    card={card}
+                    idList={list._id}
+                    idBoard={board._id}
+                    handleDelete={handleCardDelete}
+                  />
                 ))}
               </List>
             ))}
