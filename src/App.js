@@ -6,6 +6,7 @@ import BoardList from './pages/BoardList';
 import BoardCreate from './pages/BoardCreate';
 import BoardEdit from './pages/BoardEdit';
 import BoardDetails from './pages/BoardDetails';
+import ListCreate from './pages/ListCreate';
 
 const App = () => {
   return (
@@ -25,6 +26,9 @@ const App = () => {
         </Route>
         <Route exact path="/boards/:id">
           <BoardDetails />
+        </Route>
+        <Route exact path="/boards/:idBoard/lists/new">
+          <ListCreate />
         </Route>
       </Switch>
     </Router>
