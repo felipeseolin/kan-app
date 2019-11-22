@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import BoardList from './pages/BoardList';
 import BoardCreate from './pages/BoardCreate';
 import BoardEdit from './pages/BoardEdit';
+import BoardDetails from './pages/BoardDetails';
 
 const App = () => {
   return (
@@ -21,6 +22,9 @@ const App = () => {
         </Route>
         <Route exact path="/boards/:id/edit">
           <BoardEdit />
+        </Route>
+        <Route exact path="/boards/:id">
+          <BoardDetails />
         </Route>
       </Switch>
     </Router>
