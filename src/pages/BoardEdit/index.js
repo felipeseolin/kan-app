@@ -29,7 +29,6 @@ const BoardEdit = () => {
 
     api
       .patch(`/boards/${id}`, {
-        id,
         name: data.get('name'),
         description: data.get('description'),
       })
