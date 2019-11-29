@@ -1,40 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import api from '../../services/api';
 
-const BoardEdit = () => {
-  const { id } = useParams();
-  const [board, setBoard] = useState({});
-  const [nameField, setName] = useState('');
-  const [descriptionField, setDescription] = useState('');
+const ListCreate = () => {
+  const { idBoard } = useParams();
 
-  const fetchBoard = async () => {
-    const response = await api.get(`boards/${id}`);
-    setBoard(response.data);
-    setName(response.data.name);
-    setDescription(response.data.description);
-  };
-
-  useEffect(() => {
-    fetchBoard();
-  }, []);
-
-  const handleEdit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
+    // Disable Button
     const $btn = document.querySelector('#btnForm');
     $btn.disabled = true;
 
     const data = new FormData(event.target);
 
     api
-      .patch(`/boards/${id}`, {
+      .post('/lists', {
         name: data.get('name'),
         description: data.get('description'),
+        _board: idBoard,
       })
       .then(() => {
-        alert(`Quadro: ${board.name} atualizado!`);
-        window.location.href = '/boards';
+        alert('Nova Lista salva com sucesso');
+        window.location.href = `/boards/${idBoard}`;
       })
       .catch(err => {
         alert('Ocorreu um erro tente novamente');
@@ -45,30 +33,23 @@ const BoardEdit = () => {
       });
   };
 
-  const handleNameChange = event => {
-    setName(event.target.value);
-  };
-
-  const handleDescriptionChange = event => {
-    setDescription(event.target.value);
-  };
-
   return (
     <div className="container">
-      <h1>{board ? board.name : ''}</h1>
-      <form onSubmit={handleEdit}>
+      <h1>Nova Lista</h1>
+
+      <form onSubmit={handleSubmit}>
+        {/* Name Input */}
         <div className="form-group">
-          <label htmlFor="name">Nome:</label>
+          <label htmlFor="name">Nome: </label>
           <input
             id="name"
             name="name"
             className="form-control"
             type="text"
-            value={nameField}
-            onChange={handleNameChange}
             required
           />
         </div>
+        {/* Description Textarea */}
         <div className="form-group">
           <label htmlFor="description">Descrição: </label>
           <textarea
@@ -77,10 +58,9 @@ const BoardEdit = () => {
             className="form-control"
             cols="5"
             rows="10"
-            value={descriptionField}
-            onChange={handleDescriptionChange}
           />
         </div>
+
         <button
           id="btnForm"
           type="submit"
@@ -93,4 +73,4 @@ const BoardEdit = () => {
   );
 };
 
-export default BoardEdit;
+export default ListCreate;

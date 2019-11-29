@@ -6,6 +6,10 @@ import BoardList from './pages/BoardList';
 import BoardCreate from './pages/BoardCreate';
 import BoardEdit from './pages/BoardEdit';
 import BoardDetails from './pages/BoardDetails';
+import ListCreate from './pages/ListCreate';
+import ListEdit from './pages/ListEdit';
+import CardCreate from './pages/CardCreate';
+import CardEdit from './pages/CardEdit';
 
 const App = () => {
   return (
@@ -25,6 +29,18 @@ const App = () => {
         </Route>
         <Route exact path="/boards/:id">
           <BoardDetails />
+        </Route>
+        <Route exact path="/boards/:idBoard/lists/new">
+          <ListCreate />
+        </Route>
+        <Route exact path="/boards/:idBoard/lists/:idList/edit">
+          <ListEdit />
+        </Route>
+        <Route exact path="/boards/:idBoard/lists/:idList/cards/new">
+          <CardCreate />
+        </Route>
+        <Route exact path="/boards/:idBoard/lists/:idList/cards/:idCard/edit">
+          <CardEdit />
         </Route>
       </Switch>
     </Router>

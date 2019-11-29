@@ -1,40 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import api from '../../services/api';
 
-const BoardEdit = () => {
-  const { id } = useParams();
-  const [board, setBoard] = useState({});
+const CardEdit = () => {
+  const { idList, idBoard, idCard } = useParams();
+
+  const [lists, setLists] = useState([]);
+  const [card, setCard] = useState({});
   const [nameField, setName] = useState('');
   const [descriptionField, setDescription] = useState('');
+  const [listField, setList] = useState(idList);
 
-  const fetchBoard = async () => {
-    const response = await api.get(`boards/${id}`);
-    setBoard(response.data);
+  const fetchLists = async () => {
+    const response = await api.get('lists');
+    setLists(response.data);
+  };
+
+  useEffect(() => {
+    fetchLists();
+  }, []);
+
+  const fetchCard = async () => {
+    const response = await api.get(`cards/${idCard}`);
+    setCard(response.data);
     setName(response.data.name);
     setDescription(response.data.description);
   };
 
   useEffect(() => {
-    fetchBoard();
+    fetchCard();
   }, []);
 
   const handleEdit = event => {
     event.preventDefault();
+    // Disable button
     const $btn = document.querySelector('#btnForm');
     $btn.disabled = true;
-
+    // Get form data
     const data = new FormData(event.target);
 
     api
-      .patch(`/boards/${id}`, {
+      .patch(`/cards/${idCard}`, {
         name: data.get('name'),
         description: data.get('description'),
+        _list: data.get('list'),
       })
       .then(() => {
-        alert(`Quadro: ${board.name} atualizado!`);
-        window.location.href = '/boards';
+        alert(`Cartão: ${card.name} atualizado com sucesso`);
+        window.location.href = `/boards/${idBoard}`;
       })
       .catch(err => {
         alert('Ocorreu um erro tente novamente');
@@ -53,12 +67,29 @@ const BoardEdit = () => {
     setDescription(event.target.value);
   };
 
+  const handleListChange = event => {
+    setList(event.target.value);
+  };
+
+  const renderOptions = () => {
+    if (lists) {
+      return lists.map(list => (
+        <option key={list._id} value={list._id}>
+          {list.name}
+        </option>
+      ));
+    }
+    return <option>Selecione uma opção...</option>;
+  };
+
   return (
     <div className="container">
-      <h1>{board ? board.name : ''}</h1>
+      <h1>{card ? card.name : 'Editar cartão'}</h1>
+
       <form onSubmit={handleEdit}>
+        {/* Name Input */}
         <div className="form-group">
-          <label htmlFor="name">Nome:</label>
+          <label htmlFor="name">Nome: </label>
           <input
             id="name"
             name="name"
@@ -69,6 +100,7 @@ const BoardEdit = () => {
             required
           />
         </div>
+        {/* Description Textarea */}
         <div className="form-group">
           <label htmlFor="description">Descrição: </label>
           <textarea
@@ -81,10 +113,29 @@ const BoardEdit = () => {
             onChange={handleDescriptionChange}
           />
         </div>
+
+        {/* Change list */}
+        <div className="form-group">
+          <label htmlFor="list">Trocar de lista</label>
+          <select
+            id="list"
+            name="list"
+            className="form-control"
+            value={listField}
+            onChange={handleListChange}
+          >
+            {lists.map(list => (
+              <option key={list._id} value={list._id}>
+                {list.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <button
           id="btnForm"
-          type="submit"
           className="btn btn-success float-right"
+          type="submit"
         >
           Salvar
         </button>
@@ -93,4 +144,4 @@ const BoardEdit = () => {
   );
 };
 
-export default BoardEdit;
+export default CardEdit;

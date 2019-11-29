@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Card = ({ idList, card }) => {
+const Card = ({ idBoard, idList, card, handleDelete }) => {
   return (
     <div className="card m-3">
       <div className="card-body">
@@ -10,7 +10,7 @@ const Card = ({ idList, card }) => {
       <div className="float-right">
         <div className="m-1 float-right">
           <a
-            href={`/lists/${idList}}/cards/${card.id}`}
+            href={`/boards/${idBoard}/lists/${idList}/cards/${card._id}/edit`}
             className="btn btn-sm btn-primary"
           >
             Editar
@@ -20,7 +20,7 @@ const Card = ({ idList, card }) => {
           <button
             type="button"
             className="btn btn-sm btn-danger"
-            onClick={() => console.log('vai deletar')}
+            onClick={() => handleDelete(card._id)}
           >
             Excluir
           </button>

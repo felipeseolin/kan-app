@@ -1,40 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import api from '../../services/api';
 
-const BoardEdit = () => {
-  const { id } = useParams();
-  const [board, setBoard] = useState({});
-  const [nameField, setName] = useState('');
-  const [descriptionField, setDescription] = useState('');
+const CardCreate = () => {
+  const { idList, idBoard } = useParams();
 
-  const fetchBoard = async () => {
-    const response = await api.get(`boards/${id}`);
-    setBoard(response.data);
-    setName(response.data.name);
-    setDescription(response.data.description);
-  };
-
-  useEffect(() => {
-    fetchBoard();
-  }, []);
-
-  const handleEdit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
+    // Disable button
     const $btn = document.querySelector('#btnForm');
     $btn.disabled = true;
-
+    // Get form data
     const data = new FormData(event.target);
 
     api
-      .patch(`/boards/${id}`, {
+      .post('/cards', {
         name: data.get('name'),
         description: data.get('description'),
+        _list: idList,
       })
       .then(() => {
-        alert(`Quadro: ${board.name} atualizado!`);
-        window.location.href = '/boards';
+        alert('Novo cartão salvo com sucesso');
+        window.location.href = `/boards/${idBoard}`;
       })
       .catch(err => {
         alert('Ocorreu um erro tente novamente');
@@ -45,30 +33,23 @@ const BoardEdit = () => {
       });
   };
 
-  const handleNameChange = event => {
-    setName(event.target.value);
-  };
-
-  const handleDescriptionChange = event => {
-    setDescription(event.target.value);
-  };
-
   return (
     <div className="container">
-      <h1>{board ? board.name : ''}</h1>
-      <form onSubmit={handleEdit}>
+      <h1>Novo Cartão</h1>
+
+      <form onSubmit={handleSubmit}>
+        {/* Name Input */}
         <div className="form-group">
-          <label htmlFor="name">Nome:</label>
+          <label htmlFor="name">Nome: </label>
           <input
             id="name"
             name="name"
             className="form-control"
             type="text"
-            value={nameField}
-            onChange={handleNameChange}
             required
           />
         </div>
+        {/* Description Textarea */}
         <div className="form-group">
           <label htmlFor="description">Descrição: </label>
           <textarea
@@ -77,14 +58,13 @@ const BoardEdit = () => {
             className="form-control"
             cols="5"
             rows="10"
-            value={descriptionField}
-            onChange={handleDescriptionChange}
           />
         </div>
+
         <button
           id="btnForm"
-          type="submit"
           className="btn btn-success float-right"
+          type="submit"
         >
           Salvar
         </button>
@@ -93,4 +73,4 @@ const BoardEdit = () => {
   );
 };
 
-export default BoardEdit;
+export default CardCreate;
