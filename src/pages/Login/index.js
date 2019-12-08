@@ -26,8 +26,8 @@ const Login = ({ history }) => {
       })
       .then(res => {
         const { user, token } = res.data;
-        localStorage.setItem('@kan/currentuser', user);
-        localStorage.setItem('@kan/token', token);
+        sessionStorage.setItem('@kan/currentuser', user);
+        sessionStorage.setItem('@kan/token', token);
         history.push('/boards');
         return;
       })

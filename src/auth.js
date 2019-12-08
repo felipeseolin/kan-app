@@ -3,7 +3,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 const isAuth = () => {
-  if (localStorage.getItem('@kan/currentuser') !== null) {
+  if (sessionStorage.getItem('@kan/currentuser') !== null) {
     return true;
   }
   return false;

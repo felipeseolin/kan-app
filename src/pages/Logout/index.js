@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 
 const Logout = ({ history }) => {
   useEffect(() => {
-    localStorage.removeItem('@kan/currentuser');
-    localStorage.removeItem('@kan/token');
+    sessionStorage.clear();
     history.push('/');
   }, []);
 
