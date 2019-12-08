@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React from 'react';
 
-import api from '../../services/api';
-
-const Login = ({ history }) => {
+const Register = () => {
   const containerStyle = {
     display: 'flex',
     justifyContent: 'center',
@@ -18,23 +15,7 @@ const Login = ({ history }) => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    const data = new FormData(event.target);
-
-    api
-      .post('/authenticate', {
-        email: data.get('email'),
-        password: data.get('password'),
-      })
-      .then(res => {
-        const { user, token } = res.data;
-        localStorage.setItem('@kan/currentuser', user);
-        localStorage.setItem('@kan/token', token);
-        history.push('/boards');
-        return;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    console.log(event);
   };
 
   return (
@@ -42,7 +23,17 @@ const Login = ({ history }) => {
       <div className="card" style={{ width: '70vw' }}>
         <form onSubmit={handleSubmit} method="POST">
           <div className="card-body">
-            <h1 className="card-title">Login</h1>
+            <h1 className="card-title">Crie sua conta</h1>
+            <div className="form-group">
+              <label htmlFor="email">Nome</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                className="form-control"
+                required
+              />
+            </div>
             <div className="form-group">
               <label htmlFor="email">E-mail</label>
               <input
@@ -63,13 +54,20 @@ const Login = ({ history }) => {
                 required
               />
             </div>
-            <a href="/register" className="btn">
-              Registrar-me
-            </a>
+            <div className="form-group">
+              <label htmlFor="password">Confime sua senha</label>
+              <input
+                id="password-confirm"
+                name="password-confirm"
+                type="password"
+                className="form-control"
+                required
+              />
+            </div>
           </div>
           <div className="card-footer">
             <button type="submit" className="btn btn-dark btn-lg">
-              Entrar
+              Registrar
             </button>
           </div>
         </form>
@@ -78,4 +76,4 @@ const Login = ({ history }) => {
   );
 };
 
-export default Login;
+export default Register;
