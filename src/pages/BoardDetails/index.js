@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import List from '../../components/List';
 import Card from '../../components/Card';
+import MyNavbar from '../../components/MyNavbar';
 
 import api from '../../services/api';
 
@@ -36,46 +37,49 @@ const BoardDetails = () => {
   };
 
   return (
-    <div className="container-fluid">
-      {board ? (
-        <>
-          <h1>{board ? board.name : ''}</h1>
-          <p>{board ? board.descriptio : ''}</p>
+    <>
+      <MyNavbar/>
+      <div className="container-fluid">
+        {board ? (
+          <>
+            <h1>{board ? board.name : ''}</h1>
+            <p>{board ? board.descriptio : ''}</p>
 
-          <div className="col col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-3 mt-3 p-0">
-            <a
-              href={`/boards/${board._id}/lists/new`}
-              className="btn btn-success"
-            >
-              Nova lista
-            </a>
-          </div>
-
-          <div className="row">
-            {board.lists.map(list => (
-              <List
-                key={list._id}
-                list={list}
-                idBoard={board._id}
-                handleDelete={handleListDelete}
+            <div className="col col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-3 mt-3 p-0">
+              <a
+                href={`/boards/${board._id}/lists/new`}
+                className="btn btn-success"
               >
-                {list.cards.map(card => (
-                  <Card
-                    key={card._id}
-                    card={card}
-                    idList={list._id}
-                    idBoard={board._id}
-                    handleDelete={handleCardDelete}
-                  />
-                ))}
-              </List>
-            ))}
-          </div>
-        </>
-      ) : (
-        <p>Carregando...</p>
-      )}
-    </div>
+                Nova lista
+              </a>
+            </div>
+
+            <div className="row">
+              {board.lists.map(list => (
+                <List
+                  key={list._id}
+                  list={list}
+                  idBoard={board._id}
+                  handleDelete={handleListDelete}
+                >
+                  {list.cards.map(card => (
+                    <Card
+                      key={card._id}
+                      card={card}
+                      idList={list._id}
+                      idBoard={board._id}
+                      handleDelete={handleCardDelete}
+                    />
+                  ))}
+                </List>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p>Carregando...</p>
+        )}
+      </div>
+    </>
   );
 };
 

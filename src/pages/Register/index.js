@@ -1,6 +1,7 @@
 import React from 'react';
+import api from '../../services/api';
 
-const Register = () => {
+const Register = ({ history }) => {
   const containerStyle = {
     display: 'flex',
     justifyContent: 'center',
@@ -13,9 +14,27 @@ const Register = () => {
     backgroundSize: 'cover',
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event);
+
+    const data = new FormData(event.target);
+
+    api
+      .post('/register', {
+        name: data.get('name'),
+        email: data.get('email'),
+        password: data.get('password'),
+      })
+      .then((res) => {
+        const { user, token } = res.data;
+        sessionStorage.setItem('@kan/currentuser', user);
+        sessionStorage.setItem('@kan/token', token);
+        history.push('/boards');
+      })
+      .catch((err) => {
+        alert('Ocorreu um erro');
+        console.log(err);
+      });
   };
 
   return (

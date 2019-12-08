@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import MyNavbar from '../../components/MyNavbar';
 import BoardItem from '../../components/BoardItem';
 import api from '../../services/api';
 
@@ -24,21 +25,24 @@ const BoardList = () => {
   };
 
   return (
-    <div className="container">
-      <h1>Quadros</h1>
-      <a href="/boards/new" className="btn btn-success">
-        Novo quadro
-      </a>
-      {boards.map(board => (
-        <BoardItem
-          key={board._id}
-          title={board.name}
-          description={board.description}
-          id={board._id}
-          handleDelete={handleDelete}
-        />
-      ))}
-    </div>
+    <>
+      <MyNavbar />
+      <div className="container-fluid">
+        <h1>Quadros</h1>
+        <a href="/boards/new" className="btn btn-success">
+          Novo quadro
+        </a>
+        {boards.map(board => (
+          <BoardItem
+            key={board._id}
+            title={board.name}
+            description={board.description}
+            id={board._id}
+            handleDelete={handleDelete}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 

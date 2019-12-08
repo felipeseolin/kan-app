@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import MyNavbar from '../../components/MyNavbar';
+
 import api from '../../services/api';
 
 const BoardEdit = () => {
@@ -54,42 +56,45 @@ const BoardEdit = () => {
   };
 
   return (
-    <div className="container">
-      <h1>{board ? board.name : ''}</h1>
-      <form onSubmit={handleEdit}>
-        <div className="form-group">
-          <label htmlFor="name">Nome:</label>
-          <input
-            id="name"
-            name="name"
-            className="form-control"
-            type="text"
-            value={nameField}
-            onChange={handleNameChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="description">Descrição: </label>
-          <textarea
-            id="description"
-            name="description"
-            className="form-control"
-            cols="5"
-            rows="10"
-            value={descriptionField}
-            onChange={handleDescriptionChange}
-          />
-        </div>
-        <button
-          id="btnForm"
-          type="submit"
-          className="btn btn-success float-right"
-        >
-          Salvar
-        </button>
-      </form>
-    </div>
+    <>
+      <MyNavbar/>
+      <div className="container">
+        <h1>{board ? board.name : ''}</h1>
+        <form onSubmit={handleEdit}>
+          <div className="form-group">
+            <label htmlFor="name">Nome:</label>
+            <input
+              id="name"
+              name="name"
+              className="form-control"
+              type="text"
+              value={nameField}
+              onChange={handleNameChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="description">Descrição: </label>
+            <textarea
+              id="description"
+              name="description"
+              className="form-control"
+              cols="5"
+              rows="10"
+              value={descriptionField}
+              onChange={handleDescriptionChange}
+            />
+          </div>
+          <button
+            id="btnForm"
+            type="submit"
+            className="btn btn-success float-right"
+          >
+            Salvar
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 
