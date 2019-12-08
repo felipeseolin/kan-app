@@ -14,6 +14,7 @@ import ListCreate from './pages/ListCreate';
 import ListEdit from './pages/ListEdit';
 import CardCreate from './pages/CardCreate';
 import CardEdit from './pages/CardEdit';
+import Logout from './pages/Logout';
 
 const Routes = () => (
   <Router>
@@ -44,6 +45,7 @@ const Routes = () => (
         path="/boards/:idBoard/lists/:idList/cards/:idCard/edit"
         component={CardEdit}
       />
+      <PrivateRoute exact path="/logout" component={Logout} />
     </Switch>
   </Router>
 );
