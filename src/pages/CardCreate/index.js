@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import Errors from '../../components/Errors';
 import MyNavbar from '../../components/MyNavbar';
 
 import api from '../../services/api';
 
-const CardCreate = () => {
+const CardCreate = ({ history }) => {
+  const [errors, setErrors] = useState();
   const { idList, idBoard } = useParams();
 
   const handleSubmit = event => {
@@ -23,12 +25,11 @@ const CardCreate = () => {
         _list: idList,
       })
       .then(() => {
-        alert('Novo cartão salvo com sucesso');
-        window.location.href = `/boards/${idBoard}`;
+        history.push(`/boards/${idBoard}`);
       })
-      .catch(err => {
+      .catch((err) => {
+        setErrors(err.response.data.error);
         alert('Ocorreu um erro tente novamente');
-        window.location.reload();
       })
       .finally(() => {
         $btn.disabled = false;
@@ -40,6 +41,8 @@ const CardCreate = () => {
       <MyNavbar/>
       <div className="container">
         <h1>Novo Cartão</h1>
+
+        <Errors errors={errors} />
 
         <form onSubmit={handleSubmit}>
           {/* Name Input */}
