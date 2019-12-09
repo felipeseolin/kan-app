@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import api from '../../services/api';
 
 const Register = ({ history }) => {
+  const [errors, setErrors] = useState(null);
   const containerStyle = {
     display: 'flex',
     justifyContent: 'center',
@@ -16,14 +17,28 @@ const Register = ({ history }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     const data = new FormData(event.target);
+
+    const password = data.get('password');
+    const passwordConfirm = data.get('password-confirm');
+    // Validation
+    if (password && passwordConfirm) {
+      if (password !== passwordConfirm) {
+        alert('As senhas digitadas não conferem');
+        return;
+      }
+      if (password.length < 6) {
+        alert('A senha deve possuir ao menos 6 caracteres');
+        return;
+      }
+    }
 
     api
       .post('/register', {
         name: data.get('name'),
         email: data.get('email'),
         password: data.get('password'),
+        passwordConfirm: data.get('password-confirm'),
       })
       .then((res) => {
         const { user, token } = res.data;
@@ -32,8 +47,8 @@ const Register = ({ history }) => {
         history.push('/boards');
       })
       .catch((err) => {
-        alert('Ocorreu um erro');
-        console.log(err);
+        setErrors(err.response.data.error);
+        alert('Ocorreu um erro. Preencha todos os campos corretamente.');
       });
   };
 
@@ -43,6 +58,15 @@ const Register = ({ history }) => {
         <form onSubmit={handleSubmit} method="POST">
           <div className="card-body">
             <h1 className="card-title">Crie sua conta</h1>
+            {
+              errors
+                ? (
+                  <div className="alert alert-danger">
+                    {errors.map((error, index) => <p key={index}>{error}</p>)}
+                  </div>
+                )
+                : null
+            }
             <div className="form-group">
               <label htmlFor="email">Nome</label>
               <input
@@ -50,6 +74,7 @@ const Register = ({ history }) => {
                 name="name"
                 type="text"
                 className="form-control"
+                minLength={1}
                 required
               />
             </div>
