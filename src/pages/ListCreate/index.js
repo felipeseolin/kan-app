@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import Errors from '../../components/Errors';
 import MyNavbar from '../../components/MyNavbar';
 
 import api from '../../services/api';
 
-const ListCreate = () => {
+const ListCreate = ({ history }) => {
+  const [errors, setErrors] = useState();
   const { idBoard } = useParams();
 
   const handleSubmit = event => {
@@ -23,12 +25,11 @@ const ListCreate = () => {
         _board: idBoard,
       })
       .then(() => {
-        alert('Nova Lista salva com sucesso');
-        window.location.href = `/boards/${idBoard}`;
+        history.push(`/boards/${idBoard}`);
       })
-      .catch(err => {
+      .catch((err) => {
+        setErrors(err.response.data.error);
         alert('Ocorreu um erro tente novamente');
-        window.location.reload();
       })
       .finally(() => {
         $btn.disabled = false;
@@ -40,7 +41,7 @@ const ListCreate = () => {
       <MyNavbar/>
       <div className="container">
         <h1>Nova Lista</h1>
-
+        <Errors errors={errors} />
         <form onSubmit={handleSubmit}>
           {/* Name Input */}
           <div className="form-group">

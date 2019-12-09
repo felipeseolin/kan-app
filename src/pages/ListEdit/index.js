@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import Errors from '../../components/Errors';
 import MyNavbar from '../../components/MyNavbar';
 
 import api from '../../services/api';
 
-const ListEdit = () => {
+const ListEdit = ({ history }) => {
+  const [errors, setErrors] = useState();
   const { idBoard, idList } = useParams();
   const [list, setList] = useState({});
   const [nameField, setName] = useState('');
@@ -37,12 +39,11 @@ const ListEdit = () => {
         _board: idBoard,
       })
       .then(() => {
-        alert(`Lista: ${list.name} atualizada!`);
-        window.location.href = `/boards/${idBoard}`;
+        history.push(`/boards/${idBoard}`);
       })
-      .catch(err => {
+      .catch((err) => {
+        setErrors(err.response.data.error);
         alert('Ocorreu um erro tente novamente');
-        window.location.reload();
       })
       .finally(() => {
         $btn.disabled = false;
@@ -64,6 +65,8 @@ const ListEdit = () => {
         {list ? (
           <>
             <h1>{list.name}</h1>
+
+            <Errors errors={errors} />
 
             <form onSubmit={handleEdit}>
               {/* Name Input */}
