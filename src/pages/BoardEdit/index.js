@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import Errors from '../../components/Errors';
 import MyNavbar from '../../components/MyNavbar';
 
 import api from '../../services/api';
 
-const BoardEdit = () => {
+const BoardEdit = ({ history }) => {
+  const [errors, setErrors] = useState();
   const { id } = useParams();
   const [board, setBoard] = useState({});
   const [nameField, setName] = useState('');
@@ -35,12 +37,11 @@ const BoardEdit = () => {
         description: data.get('description'),
       })
       .then(() => {
-        alert(`Quadro: ${board.name} atualizado!`);
-        window.location.href = '/boards';
+        history.push('/boards');
       })
-      .catch(err => {
+      .catch((err) => {
+        setErrors(err.response.data.error);
         alert('Ocorreu um erro tente novamente');
-        window.location.reload();
       })
       .finally(() => {
         $btn.disabled = false;
@@ -59,7 +60,8 @@ const BoardEdit = () => {
     <>
       <MyNavbar/>
       <div className="container">
-        <h1>{board ? board.name : ''}</h1>
+        <h1>{board ? board.name : 'Quadro'}</h1>
+        <Errors errors={errors} />
         <form onSubmit={handleEdit}>
           <div className="form-group">
             <label htmlFor="name">Nome:</label>

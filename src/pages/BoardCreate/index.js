@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import MyNavbar from '../../components/MyNavbar';
 import api from '../../services/api';
+import Errors from '../../components/Errors';
 
-const BoardCreate = () => {
+const BoardCreate = ({ history }) => {
+  const [errors, setErrors] = useState();
+
   const handleSubmit = event => {
     event.preventDefault();
     const $btn = document.querySelector('#btnForm');
@@ -17,12 +20,11 @@ const BoardCreate = () => {
         description: data.get('description'),
       })
       .then(() => {
-        alert('Novo Quadro salvo com sucesso');
-        window.location.href = '/boards';
+        history.push('/boards');
       })
       .catch(err => {
+        setErrors(err.response.data.error);
         alert('Ocorreu um erro tente novamente');
-        window.location.reload();
       })
       .finally(() => {
         $btn.disabled = false;
@@ -34,6 +36,7 @@ const BoardCreate = () => {
       <MyNavbar/>
       <div className="container">
         <h1>Novo quadro</h1>
+        <Errors errors={errors} />
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Nome:</label>
