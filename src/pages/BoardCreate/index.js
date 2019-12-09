@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import MyNavbar from '../../components/MyNavbar';
 import api from '../../services/api';
+import Errors from '../../components/Errors';
 
-const BoardCreate = () => {
+const BoardCreate = ({ history }) => {
+  const [errors, setErrors] = useState();
+
   const handleSubmit = event => {
     event.preventDefault();
     const $btn = document.querySelector('#btnForm');
@@ -16,12 +20,11 @@ const BoardCreate = () => {
         description: data.get('description'),
       })
       .then(() => {
-        alert('Novo Quadro salvo com sucesso');
-        window.location.href = '/boards';
+        history.push('/boards');
       })
       .catch(err => {
+        setErrors(err.response.data.error);
         alert('Ocorreu um erro tente novamente');
-        window.location.reload();
       })
       .finally(() => {
         $btn.disabled = false;
@@ -29,39 +32,42 @@ const BoardCreate = () => {
   };
 
   return (
-    <div className="container">
-      <h1>Novo quadro</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">Nome:</label>
-          <input
-            id="name"
-            name="name"
-            className="form-control"
-            type="text"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="description">Descrição: </label>
-          <textarea
-            id="description"
-            name="description"
-            className="form-control"
-            cols="5"
-            rows="10"
-            REACT_APP_API_URL
-          />
-        </div>
-        <button
-          id="btnForm"
-          type="submit"
-          className="btn btn-success float-right"
-        >
-          Salvar
-        </button>
-      </form>
-    </div>
+    <>
+      <MyNavbar/>
+      <div className="container">
+        <h1>Novo quadro</h1>
+        <Errors errors={errors} />
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">Nome:</label>
+            <input
+              id="name"
+              name="name"
+              className="form-control"
+              type="text"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="description">Descrição: </label>
+            <textarea
+              id="description"
+              name="description"
+              className="form-control"
+              cols="5"
+              rows="10"
+            />
+          </div>
+          <button
+            id="btnForm"
+            type="submit"
+            className="btn btn-success float-right"
+          >
+            Salvar
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 

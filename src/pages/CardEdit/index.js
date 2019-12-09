@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import Errors from '../../components/Errors';
+import MyNavbar from '../../components/MyNavbar';
+
 import api from '../../services/api';
 
-const CardEdit = () => {
+const CardEdit = ({ history }) => {
   const { idList, idBoard, idCard } = useParams();
 
+  const [errors, setErrors] = useState();
   const [lists, setLists] = useState([]);
   const [card, setCard] = useState({});
   const [nameField, setName] = useState('');
@@ -13,7 +17,7 @@ const CardEdit = () => {
   const [listField, setList] = useState(idList);
 
   const fetchLists = async () => {
-    const response = await api.get('lists');
+    const response = await api.get(`/boards/${idBoard}/lists`);
     setLists(response.data);
   };
 
@@ -47,12 +51,11 @@ const CardEdit = () => {
         _list: data.get('list'),
       })
       .then(() => {
-        alert(`Cartão: ${card.name} atualizado com sucesso`);
-        window.location.href = `/boards/${idBoard}`;
+        history.push(`/boards/${idBoard}`);
       })
       .catch(err => {
+        setErrors(err.response.data.error);
         alert('Ocorreu um erro tente novamente');
-        window.location.reload();
       })
       .finally(() => {
         $btn.disabled = false;
@@ -83,64 +86,69 @@ const CardEdit = () => {
   };
 
   return (
-    <div className="container">
-      <h1>{card ? card.name : 'Editar cartão'}</h1>
+    <>
+      <MyNavbar/>
+      <div className="container">
+        <h1>{card ? card.name : 'Editar cartão'}</h1>
 
-      <form onSubmit={handleEdit}>
-        {/* Name Input */}
-        <div className="form-group">
-          <label htmlFor="name">Nome: </label>
-          <input
-            id="name"
-            name="name"
-            className="form-control"
-            type="text"
-            value={nameField}
-            onChange={handleNameChange}
-            required
-          />
-        </div>
-        {/* Description Textarea */}
-        <div className="form-group">
-          <label htmlFor="description">Descrição: </label>
-          <textarea
-            id="description"
-            name="description"
-            className="form-control"
-            cols="5"
-            rows="10"
-            value={descriptionField}
-            onChange={handleDescriptionChange}
-          />
-        </div>
+        <Errors errors={errors} />
 
-        {/* Change list */}
-        <div className="form-group">
-          <label htmlFor="list">Trocar de lista</label>
-          <select
-            id="list"
-            name="list"
-            className="form-control"
-            value={listField}
-            onChange={handleListChange}
+        <form onSubmit={handleEdit}>
+          {/* Name Input */}
+          <div className="form-group">
+            <label htmlFor="name">Nome: </label>
+            <input
+              id="name"
+              name="name"
+              className="form-control"
+              type="text"
+              value={nameField}
+              onChange={handleNameChange}
+              required
+            />
+          </div>
+          {/* Description Textarea */}
+          <div className="form-group">
+            <label htmlFor="description">Descrição: </label>
+            <textarea
+              id="description"
+              name="description"
+              className="form-control"
+              cols="5"
+              rows="10"
+              value={descriptionField}
+              onChange={handleDescriptionChange}
+            />
+          </div>
+
+          {/* Change list */}
+          <div className="form-group">
+            <label htmlFor="list">Trocar de lista</label>
+            <select
+              id="list"
+              name="list"
+              className="form-control"
+              value={listField}
+              onChange={handleListChange}
+            >
+              {lists.map(list => (
+                <option key={list._id} value={list._id}>
+                  {list.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            id="btnForm"
+            className="btn btn-success float-right"
+            type="submit"
           >
-            {lists.map(list => (
-              <option key={list._id} value={list._id}>
-                {list.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <button
-          id="btnForm"
-          className="btn btn-success float-right"
-          type="submit"
-        >
-          Salvar
-        </button>
-      </form>
-    </div>
+            Salvar
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 
