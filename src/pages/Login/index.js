@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import api from '../../services/api';
 
 const Login = ({ history }) => {
+  const [errors, setErrors] = useState();
+
   const containerStyle = {
     display: 'flex',
     justifyContent: 'center',
@@ -31,7 +33,8 @@ const Login = ({ history }) => {
         history.push('/boards');
         return;
       })
-      .catch(err => {
+      .catch((err) => {
+        setErrors(err.response.data.error);
         console.log(err);
       });
   };
@@ -62,6 +65,7 @@ const Login = ({ history }) => {
                 required
               />
             </div>
+            <p>{ errors }</p>
             <a href="/register" className="btn">
               Registrar-me
             </a>
